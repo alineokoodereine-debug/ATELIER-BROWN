@@ -23,3 +23,8 @@ h1,h2{font-family:'Bodoni Moda',serif}
 .modal{background:white;padding:25px}
 .res-line{padding:8px;border-bottom:1px solid #ddd}
 @media(max-width:700px){.services{grid-template-columns:1fr}.nosotros{grid-template-columns:1fr}}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-img{height:38px;width:auto;object-fit:contain}
+.logo-fallback{font-family:'Bodoni Moda',serif;font-size:20px;letter-spacing:2px}
+/* Si subes un logo cuadrado, cambia height a 45px para que se vea más grande */
+
