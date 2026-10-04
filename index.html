@@ -21,7 +21,7 @@
 
 <section class="hero-deco">
  <div class="hero-text"><p class="top-label">— LIBREVILLE • DEPUIS 2018 • 5 CLIENTES / JOUR</p><h1>Coiffure<br>qui impose<br>le respect.</h1><p class="hero-p">Pas de coiffure rapide. Coupe architecturale, couleur de luxe. Sur rendez-vous uniquement à Louis.</p><button class="btn-brown" onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})">Réserver ma coupe</button></div>
- <div class="hero-imgs"><div class="arch arch1"><img src="https://picsum.photos/400/600?random=1"></div><div class="arch arch2"><img src="https://picsum.photos/400/600?random=2"></div></div>
+ <div class="hero-imgs"><div class="arch arch1"><img src="peluca.jpg"></div><div class="arch arch2"><img src="lavado.jpg"></div></div>
 </section>
 
 
@@ -31,12 +31,12 @@
 <div class="services" id="grid">
 <script>
 let data=[["Lissage Brésilien",60000,11],["Coupe Signature",15000,12],["Coloration Luxe",45000,13],["Fulani braids",35000,14],["Pose de perruque",40000,15],["Rituel Capillaire",25000,16],["Babyliss Boucles",12000,17],["Chignon Mariage",30000,18],["Carré Bob Braids",20000,19],["Box Braids Classique",18000,20]];
-document.write(data.map(d=>`<div class=s><img src="https://picsum.photos/300/300?${d[2]}"><div><h3>${d[0]}</h3><p class=price>${d[1].toLocaleString()} FCFA</p><button class=btn onclick="add('d[0]',{d[1]})">AJOUTER</button></div></div>`).join(''));
+document.write(data.map(d=>`<div class=s><img src="tinte.jpg"><div><h3>${d[0]}</h3><p class=price>${d[1].toLocaleString()} FCFA</p><button class=btn onclick="add('d[0]',{d[1]})">AJOUTER</button></div></div>`).join(''));
 </script>
 </div>
 
 
-<section class="about-collective"><div class="collective-left"><h2>Nous ne sommes<br>pas un salon.</h2><p>Atelier Brown c'est un atelier. Serviettes blanches, café offert, ponctualité militaire. Formées à Paris et Abidjan. Une cliente à la fois.</p><div class="stats"><div><b>5</b><small>Clientes / jour max</small></div><div><b>8k+</b><small>Clientes satisfaites</small></div><div><b>6ans</b><small>Depuis 2018</small></div></div></div><div class="collective-right"><div class="team-arch"><img src="https://picsum.photos/300/400?random=21"><p>Gérante • Paris</p></div><div class="team-arch"><img src="https://picsum.photos/300/400?random=22"><p>Coloriste • Locks</p></div></div></section>
+<section class="about-collective"><div class="collective-left"><h2>Nous ne sommes<br>pas un salon.</h2><p>Atelier Brown c'est un atelier. Serviettes blanches, café offert, ponctualité militaire. Formées à Paris et Abidjan. Une cliente à la fois.</p><div class="stats"><div><b>5</b><small>Clientes / jour max</small></div><div><b>8k+</b><small>Clientes satisfaites</small></div><div><b>6ans</b><small>Depuis 2018</small></div></div></div><div class="collective-right"><div class="team-arch"><img src="https://picsum.photos/300/400?random=21"><p>Gérante • Paris</p></div><div class="team-arch"><img src="trenzas con rizo.jpg"><p>Coloriste • Locks</p></div></div></section>
 
 
 <div id="drawer"><h2>PANIER</h2><div id="items"></div><b id="tot"></b><br><br><input type="date" id="d"><input type="time" id="t"><p class="acompte">Acompte 5000F Airtel Money 07X + capture:</p><input type="file"><button class="btn-brown full" onclick="order()">COMMANDER VIA WHATSAPP</button><button class="btn-close" onclick="document.getElementById('drawer').classList.remove('open')">FERMER</button></div>
