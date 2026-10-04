@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATELIER BROWN | Coiffure de Luxe - Libreville</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700;900&family=Inter:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<div class="header"><h2>ATELIER BROWN</h2><div>
+<span onclick="document.getElementById('my').style.display='block';showMy()" class="link-rdv">MES RDV</span>
+<b onclick="document.getElementById('drawer').classList.add('open')" class="cart-btn">PANIER (<span id="c">0</span>)</b>
+</div></div>
+
+
+<div class="hero-title"><h1>COIFFURE<br>QUI COÛTE<br>CHER MAIS<br>QUI DURE.</h1><p>5 clientes / jour. Pas plus. Coupe architecturale à Libreville.</p></div>
+
+
+<div class="services" id="grid">
+<!-- 10 servicios generados -->
+<script>
+let data=[["Lissage Brésilien",60000,11],["Coupe Signature",15000,12],["Coloration Luxe",45000,13],["Tresses Sans Douleur",35000,14],["Wig Installation",40000,15],["Soin Kératine",25000,16],["Babyliss Boucles",12000,17],["Chignon Mariage",30000,18],["Défrisage Doux",20000,19],["Entretien Locks",18000,20]];
+document.write(data.map(d=>`<div class=s><img src="https://picsum.photos/300/300?${d[2]}"><div><h3>${d[0]}</h3><p class=price>d[1]FCFA</p><buttonclass=btnonclick="add('{d[0]}',${d[1]})">AJOUTER</button></div></div>`).join(''));
+</script>
+</div>
+
+
+<div class="nosotros"><div><h2>NOUS</h2><p>Atelier de luxe à Louis. Formées à Paris. Serviettes blanches, café offert, ponctualité militaire.</p><br><small><a href="#" onclick="alert('Confidentialité: aucune revente')">Confidentialité</a> | <a href="#" onclick="alert('Cookies: panier uniquement')">Cookies</a></small></div><div class="mapa"><iframe src="https://maps.google.com/maps?q=Libreville&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0"></iframe></div></div>
+
+
+<div id="drawer"><h2>PANIER</h2><div id="items"></div><b id="tot"></b><br><br>
+<input type="date" id="d"><input type="time" id="t">
+<p class="acompte">Acompte 5000F Airtel Money 07X + capture photo:</p><input type="file">
+<button class="btn full" onclick="order()">COMMANDER VIA WHATSAPP</button>
+<button class="btn-close" onclick="document.getElementById('drawer').classList.remove('open')">FERMER</button>
+</div>
+
+
+<div id="my"><div class="modal"><h3>MES RDV</h3><div id="my-list"></div><br><button class="btn" onclick="this.parentElement.parentElement.style.display='none'">Fermer</button></div></div>
+
+
+<script>
+let cart=[],tot=0;
+function add(n,p){if(!n)return;cart.push({n,p});tot+=p;document.getElementById('c').innerText=cart.length;document.getElementById('items').innerHTML=cart.map(c=>`<p>${c.n} - ${c.p}F</p>`).join('');document.getElementById('tot').innerText='TOTAL: '+tot+'F'}
+function order(){
+ let date=document.getElementById('d').value,time=document.getElementById('t').value;
+ if(!date)return alert('Date requise!');
+ let msg=`ATELIER BROWN - RESA:%0A${cart.map(c=>c.n).join(', ')}%0A${date} ${time} - ${tot}F`;
+ let a=JSON.parse(localStorage.getItem('brown_admin')||'[]');a.push({date,time,tot,cart,status:'PENDIENTE'});localStorage.setItem('brown_admin',JSON.stringify(a));
+ let r=JSON.parse(localStorage.getItem('brown_res')||'[]');r.push({date,time,tot});localStorage.setItem('brown_res',JSON.stringify(r));
+ // AQUÍ VA EL TRUCO DE GOOGLE SHEET (abajo te explico)
+ if(window.SHEET_URL){fetch(window.SHEET_URL,{method:'POST',mode:'no-cors',body:JSON.stringify({date,time,tot,services:cart.map(c=>c.n).join(', ')})})}
+ window.open('https://wa.me/241077000000?text='+msg);cart=[];tot=0;document.getElementById('c').innerText='0';document.getElementById('items').innerHTML='';document.getElementById('tot').innerText='';document.getElementById('drawer').classList.remove('open');
+}
+function showMy(){let r=JSON.parse(localStorage.getItem('brown_res')||'[]');document.getElementById('my-list').innerHTML=r.map(x=>`<p class=res-line>${x.date} ${x.time} - ${x.tot}F</p>`).join('')||'Vide'}
+</script>
+</body>
+</html>
 
