@@ -30,7 +30,7 @@
 
 <div class="services" id="grid">
 <script>
-let data=[["Lissage Brésilien",60000,11],["Coupe Signature",15000,12],["Coloration Luxe",45000,13],["Tresses Sans Douleur",35000,14],["Wig Installation",40000,15],["Soin Kératine",25000,16],["Babyliss Boucles",12000,17],["Chignon Mariage",30000,18],["Défrisage Doux",20000,19],["Entretien Locks",18000,20]];
+let data=[["Lissage Brésilien",60000,11],["Coupe Signature",15000,12],["Coloration Luxe",45000,13],["Fulani braids",35000,14],["Pose de perruque",40000,15],["Rituel Capillaire",25000,16],["Babyliss Boucles",12000,17],["Chignon Mariage",30000,18],["Carré Bob Braids",20000,19],["Box Braids Classique",18000,20]];
 document.write(data.map(d=>`<div class=s><img src="https://picsum.photos/300/300?${d[2]}"><div><h3>${d[0]}</h3><p class=price>${d[1].toLocaleString()} FCFA</p><button class=btn onclick="add('d[0]',{d[1]})">AJOUTER</button></div></div>`).join(''));
 </script>
 </div>
