@@ -66,3 +66,10 @@ h1,h2,h3{font-family:'Bodoni Moda',serif}
 .services{grid-template-columns:1fr!important}
 .about-collective{grid-template-columns:1fr!important}
 }
+
+@media(max-width:800px){
+  .header{flex-wrap:nowrap!important;gap:8px}
+  .header > div:last-child{display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .link-rdv{margin-right:0!important;white-space:nowrap}
+  .cart-btn{white-space:nowrap;padding:7px 10px!important;font-size:10px!important}
+}
