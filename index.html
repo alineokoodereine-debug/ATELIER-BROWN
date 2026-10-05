@@ -64,21 +64,52 @@
 <div id="my"><div class="modal"><h3>MES RDV</h3><div id="my-list"></div><br><button class="btn-brown" onclick="this.parentElement.parentElement.style.display='none'">Fermer</button></div></div>
 
 <script>
+let cart=[], tot=0;
 
-
-let cart=[],total=0;
-function addService(n,p){
- cart.push({n,p});
- total+=p;
- document.getElementById('cart-count').innerText=cart.length;
- renderCart();
+function add(n,p){
+  cart.push({n,p});
+  tot+=p;
+  document.getElementById('c').innerText=cart.length;
+  renderCart();
 }
+function addService(n,p){ return add(n,p); } // por si algún botón aún usa addService
+
+function renderCart(){
+  let h='';
+  cart.forEach(c=> h+=`<p>${c.n} - ${c.price||c.p} FCFA</p>`);
+  document.getElementById('items').innerHTML=h;
+  document.getElementById('tot').innerText='TOTAL: '+tot+' FCFA';
+}
+
+function toggleCart(){ document.getElementById('drawer').classList.toggle('open'); }
+
+function order(){
+  let date=document.getElementById('d').value;
+  let time=document.getElementById('t').value;
+  if(!date){ alert('Choisis une date!'); return; }
+  let msg=`ATELIER BROWN - RESA:%0A${cart.map(c=>c.n).join(', ')}%0A${date} ${time} - ${tot}F`;
+  let a=JSON.parse(localStorage.getItem('brown_admin')||'[]');
+  a.push({date,time,tot,cart,status:'PENDIENTE'});
+  localStorage.setItem('brown_admin',JSON.stringify(a));
+  let r=JSON.parse(localStorage.getItem('brown_res')||'[]');
+  r.push({date,time,tot});
+  localStorage.setItem('brown_res',JSON.stringify(r));
+  window.open('https://wa.me/24162516457?text='+msg,'_blank');
+  cart=[]; tot=0;
+  document.getElementById('c').innerText='0';
+  renderCart();
+  document.getElementById('drawer').classList.remove('open');
+  showMy();
+}
+
+function showMy(){
+  document.getElementById('my').style.display='block';
+  let r=JSON.parse(localStorage.getItem('brown_res')||'[]');
+  document.getElementById('my-list').innerHTML=r.map(x=>`<p style="padding:8px;border-bottom:1px solid #ddd">${x.date} ${x.time} - ${x.tot}F</p>`).join('')||'Vide';
+}
+</script>
 
 
 
  
-function order(){let date=document.getElementById('d').value,time=document.getElementById('t').value;if(!date)return alert('Date!');let msg=`ATELIER BROWN - RESA:%0A${cart.map(c=>c.n).join(', ')}%0A${date} ${time} - ${tot}F`;let a=JSON.parse(localStorage.getItem('brown_admin')||'[]');a.push({date,time,tot,cart,status:'PENDIENTE'});localStorage.setItem('brown_admin',JSON.stringify(a));let r=JSON.parse(localStorage.getItem('brown_res')||'[]');r.push({date,time,tot});localStorage.setItem('brown_res',JSON.stringify(r));window.open('https://wa.me/24162516457?text='+msg);cart=[];tot=0;document.getElementById('c').innerText='0';document.getElementById('drawer').classList.remove('open')}
-function showMy(){document.getElementById('my').style.display='block';let r=JSON.parse(localStorage.getItem('brown_res')||'[]');document.getElementById('my-list').innerHTML=r.map(x=>`<p style="padding:8px;border-bottom:1px solid #ddd">${x.date} ${x.time} - ${x.tot}F</p>`).join('')||'Vide'}
-</script>
-</body>
-</html>
+
