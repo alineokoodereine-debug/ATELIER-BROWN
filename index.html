@@ -7,8 +7,6 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
- 
 <div class="header">
  <div class="logo-wrap">
  <img src="logo.png" class="logo-img" alt="logo">
@@ -17,7 +15,6 @@
  <div><span onclick="showMy()" class="link-rdv">MES RDV</span><b onclick="document.getElementById('drawer').classList.add('open')" class="cart-btn">PANIER (<span id="c">0</span>)</b></div>
 </div>
 
-<!-- HERO con arcos -->
 <section class="hero-deco">
  <div class="hero-text"><p class="top-label">— LIBREVILLE • DEPUIS 2018 • 5 CLIENTES / JOUR</p><h1>Coiffure<br>qui impose<br>le respect.</h1><p class="hero-p">Pas de coiffure rapide. Coupe architecturale, couleur de luxe. Sur rendez-vous uniquement à Louis.</p><button class="btn-brown" onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})">Réserver ma coupe</button></div>
  <div class="hero-imgs">
@@ -26,7 +23,6 @@
  </div>
 </section>
 
-<!-- WHAT WE PROVIDE -->
 <section class="provide">
  <h2 class="big-title">Ce que nous<br>faisons de mieux</h2>
  <div class="provide-grid">
@@ -36,7 +32,6 @@
  </div>
 </section>
 
-<!-- SERVICES - SEPARADOS CON TUS JPG -->
 <div class="services" id="grid">
  <div class="s"><img src="alisado.jpg"><div><h3>Lissage Brésilien</h3><p class="price">60.000 FCFA</p><button class="btn" onclick="add('Lissage Brésilien',60000)">AJOUTER</button></div></div>
  <div class="s"><img src="corteespecial2.jpg"><div><h3>Coupe Signature</h3><p class="price">15.000 FCFA</p><button class="btn" onclick="add('Coupe Signature',15000)">AJOUTER</button></div></div>
@@ -50,7 +45,6 @@
  <div class="s"><img src="Boxer.jpg"><div><h3>Boxer Braids</h3><p class="price">18.000 FCFA</p><button class="btn" onclick="add('Boxer Braids',18000)">AJOUTER</button></div></div>
 </div>
 
-<!-- SOBRE NOSOTROS -->
 <section class="about-collective">
  <div class="collective-left"><h2>Nous ne sommes<br>pas un salon.</h2><p>Atelier Brown c'est un atelier. Serviettes blanches, café offert, ponctualité militaire. Formées à Paris et Abidjan. Une cliente à la fois pour garantir l'excellence.</p><div class="stats"><div><b>5</b><small>Clientes / jour max</small></div><div><b>8k+</b><small>Clientes satisfaites</small></div><div><b>6ans</b><small>Depuis 2018</small></div></div></div>
  <div class="collective-right">
@@ -61,56 +55,53 @@
 
 <section class="map-section"><div class="mapa"><iframe src="https://maps.google.com/maps?q=Libreville&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0"></iframe></div></section>
 
-<div id="drawer"><h2>PANIER</h2><div id="items"></div><b id="tot"></b><br><br><input type="date" id="d"><input type="time" id="t"><p class="acompte">Acompte 5000F Airtel Money 07X + capture:</p><input type="file"><button class="btn-brown full" onclick="order()">COMMANDER VIA WHATSAPP</button><button class="btn-close" onclick="document.getElementById('drawer').classList.remove('open')">FERMER</button></div>
+<div id="drawer"><h2>PANIER</h2><div id="items"></div><b id="tot"></b><br><br><input type="date" id="d"><input type="time" id="t"><p class="acompte">Acompte 5.000F Airtel Money 07X. Après confirmation, envoie ta capture + photo de tes cheveux actuels directement dans le chat WhatsApp 📸</p><button class="btn-brown full" onclick="order()">COMMANDER VIA WHATSAPP</button><button class="btn-close" onclick="document.getElementById('drawer').classList.remove('open')">FERMER</button></div>
 <div id="my"><div class="modal"><h3>MES RDV</h3><div id="my-list"></div><br><button class="btn-brown" onclick="this.parentElement.parentElement.style.display='none'">Fermer</button></div></div>
 
 <script>
+// ===== GOOGLE SHEET PRECIOS - ATELIER BROWN =====
+const SHEET_ID = "1KHSOG3V7ZGoGC13uLbg3_UCPhtgqlXue7PRg7Ccy5Tg";
+fetch(`https://opensheet.elk.sh/${SHEET_ID}/1`)
+  .then(r => r.json())
+  .then(data => {
+    console.log("Precios Atelier:", data);
+    data.forEach((s, i) => {
+      const cards = document.querySelectorAll('#grid .s');
+      if(cards[i]){
+        if(String(s.Disponible || s.disponible || 'oui').toLowerCase() !== 'non' && String(s.Disponible || s.disponible).toLowerCase() !== 'no'){
+          const nom = s.Nom || s.nom;
+          const prix = s.Prix || s.prix;
+          if(nom) cards[i].querySelector('h3').innerText = nom;
+          if(prix){
+            cards[i].querySelector('.price').innerText = prix + ' FCFA';
+            cards[i].querySelector('button').setAttribute('onclick', `add('${String(nom).replace(/'/g,"\\'")}', ${parseInt(prix)})`);
+          }
+        } else {
+          cards[i].style.opacity = '0.3';
+          cards[i].querySelector('button').innerText = 'Indisponible';
+          cards[i].querySelector('button').disabled = true;
+        }
+      }
+    });
+  })
+  .catch(err => console.log("Sheet no publicado aún, usando precios por defecto", err));
+
 let cart=[], tot=0;
-
-function add(n,p){
-  cart.push({n,p});
-  tot+=p;
-  document.getElementById('c').innerText=cart.length;
-  renderCart();
-}
-function addService(n,p){ return add(n,p); } // por si algún botón aún usa addService
-
-function renderCart(){
-  let h='';
-  cart.forEach(c=> h+=`<p>${c.n} - ${c.price||c.p} FCFA</p>`);
-  document.getElementById('items').innerHTML=h;
-  document.getElementById('tot').innerText='TOTAL: '+tot+' FCFA';
-}
-
+function add(n,p){ cart.push({n,p}); tot+=p; document.getElementById('c').innerText=cart.length; renderCart(); }
+function addService(n,p){ return add(n,p); }
+function renderCart(){ let h=''; cart.forEach(c=> h+=`<p>${c.n} - ${c.p} FCFA</p>`); document.getElementById('items').innerHTML=h; document.getElementById('tot').innerText='TOTAL: '+tot+' FCFA'; }
 function toggleCart(){ document.getElementById('drawer').classList.toggle('open'); }
-
 function order(){
-  let date=document.getElementById('d').value;
-  let time=document.getElementById('t').value;
-  if(!date){ alert('Choisis une date!'); return; }
-  let msg=`ATELIER BROWN - RESA:%0A${cart.map(c=>c.n).join(', ')}%0A${date} ${time} - ${tot}F`;
-  let a=JSON.parse(localStorage.getItem('brown_admin')||'[]');
-  a.push({date,time,tot,cart,status:'PENDIENTE'});
-  localStorage.setItem('brown_admin',JSON.stringify(a));
-  let r=JSON.parse(localStorage.getItem('brown_res')||'[]');
-  r.push({date,time,tot});
-  localStorage.setItem('brown_res',JSON.stringify(r));
+  let date=document.getElementById('d').value, time=document.getElementById('t').value;
+  if(!date||!time) return alert('Choisis date et heure');
+  if(cart.length===0) return alert('Ajoute un service d\'abord');
+  let msg=`ATELIER BROWN - NOUVELLE RESA:%0A${cart.map(c=>'- '+c.n+' (${c.p}F)').join('%0A')}%0ADate: ${date} ${time}%0ATotal: ${tot} FCFA%0A%0A👉 N'oublie pas d'envoyer la photo de tes cheveux + capture ici 📸`;
+  let a=JSON.parse(localStorage.getItem('brown_admin')||'[]'); a.push({date,time,tot,cart,status:'PENDIENTE'}); localStorage.setItem('brown_admin',JSON.stringify(a));
+  let r=JSON.parse(localStorage.getItem('brown_res')||'[]'); r.push({date,time,tot,services:cart.map(c=>c.n).join(', ')}); localStorage.setItem('brown_res',JSON.stringify(r));
   window.open('https://wa.me/24162516457?text='+msg,'_blank');
-  cart=[]; tot=0;
-  document.getElementById('c').innerText='0';
-  renderCart();
-  document.getElementById('drawer').classList.remove('open');
-  showMy();
+  cart=[]; tot=0; document.getElementById('c').innerText='0'; renderCart(); document.getElementById('drawer').classList.remove('open'); showMy();
 }
-
-function showMy(){
-  document.getElementById('my').style.display='block';
-  let r=JSON.parse(localStorage.getItem('brown_res')||'[]');
-  document.getElementById('my-list').innerHTML=r.map(x=>`<p style="padding:8px;border-bottom:1px solid #ddd">${x.date} ${x.time} - ${x.tot}F</p>`).join('')||'Vide';
-}
+function showMy(){ document.getElementById('my').style.display='block'; let r=JSON.parse(localStorage.getItem('brown_res')||'[]'); document.getElementById('my-list').innerHTML=r.map(x=>`<p style="padding:8px;border-bottom:1px solid #ddd">${x.date} ${x.time} - ${x.services||''} - ${x.tot}F</p>`).join('')||'Vide'; }
 </script>
-
-
-
- 
-
+</body>
+</html>
